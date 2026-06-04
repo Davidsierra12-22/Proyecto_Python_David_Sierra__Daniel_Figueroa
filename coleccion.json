@@ -1,0 +1,16 @@
+[
+    {
+        "titulo": "Inception",
+        "tipo": "Película",
+        "autor": "Christopher Nolan",
+        "genero": "Ciencia Ficción",
+        "valoracion": 5
+    },
+    {
+        "titulo": "Abbey Road",
+        "tipo": "Música",
+        "autor": "The Beatles",
+        "genero": "Rock",
+        "valoracion": 4
+    }
+]

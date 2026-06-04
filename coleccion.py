@@ -1,0 +1,1 @@
+# Lógica de negocio (añadir, buscar, editar, eliminar de la lista).
