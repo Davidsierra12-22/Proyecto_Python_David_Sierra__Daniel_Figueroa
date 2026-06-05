@@ -12,5 +12,12 @@
         "autor": "The Beatles",
         "genero": "Rock",
         "valoracion": 4
+    },
+    {
+        "titulo": "EL entierro de la anaconda",
+        "tipo": "Libro",
+        "autor": "Deivis",
+        "genero": "Nobinario",
+        "valoracion": 1
     }
 ]

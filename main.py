@@ -1,52 +1,81 @@
-# Punto de entrada. Solo arranca la app y llama al menú principal.
-# Importamos los tres módulos que creaste paso a paso
 import interfaz
 import coleccion
-import persistencia
 
 def ejecutar_aplicacion():
-    """
-    Función principal que coordina el flujo de toda la aplicación.
-    """
-    # Al iniciar el programa, saludamos al usuario
     print("¡Bienvenido al Administrador de Colección!")
     
     while True:
-        # 1. Mostramos el menú y capturamos la opción elegida
         opcion = interfaz.mostrar_menu_principal()
         
-        # 2. Evaluamos la opción del usuario
+        # 1. AÑADIR
         if opcion == "1":
-            # Recolectamos los datos desde la interfaz
             titulo, tipo, autor, genero, valoracion = interfaz.pedir_datos_elemento()
-            
-            # Pasamos los datos a la lógica de la colección para que los procese y guarde
-            exito = coleccion.añadir_elemento(titulo, tipo, autor, genero, valoracion)
-            
-            if exito:
-                print("\n✅ ¡Elemento añadido con éxito a la colección!")
+            if coleccion.añadir_elemento(titulo, tipo, autor, genero, valoracion):
+                print("\n✅ ¡Elemento añadido con éxito!")
             else:
-                print("\n❌ Hubo un problema al intentar guardar el elemento.")
+                print("\n❌ Error al guardar.")
                 
+        # 2. LISTAR
         elif opcion == "2":
-            # Traemos todos los elementos que hay guardados
             elementos = coleccion.listar_elementos()
-            
-            # Le pasamos la lista a la interfaz para que dibuje la tabla con tabulate
             interfaz.mostrar_tabla_elementos(elementos)
             
-        elif opcion in ["3", "4", "5"]:
-            # Dejamos un mensaje temporal para las opciones que programaremos luego
-            print("\n🔍 Esta función estará disponible en la próxima actualización.")
+        # 3. BUSCAR
+        elif opcion == "3":
+            criterio, texto = interfaz.pedir_criterio_busqueda()
+            resultados = coleccion.buscar_elementos(criterio, texto)
+            interfaz.mostrar_tabla_elementos(resultados, f"RESULTADOS DE BÚSQUEDA ({texto.upper()})")
             
+        # 4. EDITAR
+        elif opcion == "4":
+            titulo_editar = input("\n✏️ Escribe el título EXACTO del elemento a editar: ").strip()
+            coincidencias = coleccion.buscar_elementos("titulo", titulo_editar)
+            
+            elemento_encontrado = None
+            for c in coincidencias:
+                if c["titulo"].lower() == titulo_editar.lower():
+                    elemento_encontrado = c
+                    break
+            
+            if elemento_encontrado:
+                # Capturamos todos los datos (incluyendo el tipo modificado)
+                t, tp, aut, gen, val = interfaz.pedir_datos_elemento(elemento_encontrado)
+                
+                # Armamos el diccionario correcto con el tipo incluido
+                nuevos_datos = {
+                    "titulo": t,
+                    "tipo": tp,
+                    "autor": aut,
+                    "genero": gen,
+                    "valoracion": val
+                }
+                
+                if coleccion.editar_elemento(titulo_editar, nuevos_datos):
+                    print("\n✅ ¡Elemento modificado exitosamente!")
+                else:
+                    print("\n❌ No se pudieron guardar las modificaciones.")
+            else:
+                print("❌ No se encontró ningún elemento con ese título.")
+                
+        # 5. ELIMINAR
+        elif opcion == "5":
+            titulo_borrar = input("\n❌ Escribe el título EXACTO del elemento a eliminar: ").strip()
+            seguro = input(f"¿Estás seguro de eliminar '{titulo_borrar}'? (s/n): ").strip().lower()
+            
+            if seguro == 's':
+                if coleccion.eliminar_elemento(titulo_borrar):
+                    print("\n🗑️ ¡Elemento eliminado correctamente de la colección!")
+                else:
+                    print("❌ No se encontró ningún elemento con ese título.")
+            else:
+                print("\n🚫 Operación cancelada.")
+            
+        # 6. SALIR
         elif opcion == "6":
-            # Rompemos el ciclo infinito para cerrar la aplicación de consola
             print("\n👋 ¡Gracias por usar el Administrador de Colección! Hasta luego.")
             break
-            
         else:
-            print("\n❌ Opción inválida. Por favor, digita un número del 1 al 6.")
+            print("\n❌ Opción inválida. Digita de 1 a 6.")
 
-# Este bloque le dice a Python que si ejecutamos este archivo directamente, corra la app
 if __name__ == "__main__":
     ejecutar_aplicacion()

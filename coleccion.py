@@ -1,47 +1,76 @@
-# Lógica de negocio (añadir, buscar, editar, eliminar de la lista).
-# Importamos el módulo de persistencia que hiciste en el paso anterior
 import persistencia
 
 def añadir_elemento(titulo, tipo, autor, genero, valoracion=None):
     """
-    Carga la lista actual, crea un diccionario con el nuevo elemento,
-    lo suma a la lista y guarda todo en el JSON.
+    Carga la lista, añade un diccionario con el nuevo elemento y guarda.
     """
-    # 1. Traemos los datos que ya existen en el JSON
     lista_actual = persistencia.cargar_datos()
-    
-    # 2. Creamos el nuevo elemento (un diccionario) con los datos que nos pasen
     nuevo_elemento = {
         "titulo": titulo,
-        "tipo": tipo,          # 'Libro', 'Película' o 'Música'
-        "autor": autor,        # Autor, Director o Artista
+        "tipo": tipo,
+        "autor": autor,
         "genero": genero,
-        "valoracion": valoracion  # Puede ser un número o quedar vacío (None)
+        "valoracion": valoracion
     }
-    
-    # 3. Lo agregamos a nuestra lista
     lista_actual.append(nuevo_elemento)
-    
-    # 4. Guardamos la lista actualizada en el archivo JSON usando tu otra función
-    exito = persistencia.guardar_datos(lista_actual)
-    return exito
+    return persistencia.guardar_datos(lista_actual)
 
 
-def listar_elementos(filtro_tipo=None):
+def listar_elementos():
     """
-    Devuelve la lista de elementos. 
-    Si se le pide un tipo específico (ej. 'Libro'), filtra la lista.
+    Devuelve todos los elementos registrados en el JSON.
+    """
+    return persistencia.cargar_datos()
+
+
+def buscar_elementos(criterio, texto_busqueda):
+    """
+    Busca elementos que coincidan parcial o totalmente con el criterio elegido 
+    ('titulo', 'autor' o 'genero'). No distingue entre mayúsculas y minúsculas.
     """
     lista_actual = persistencia.cargar_datos()
+    resultados = []
     
-    # Si el usuario no quiere filtrar por tipo, devolvemos todo
-    if filtro_tipo is None:
-        return lista_actual
-    
-    # Si quiere filtrar, creamos una lista solo con los que coincidan (ej: solo Películas)
-    lista_filtrada = []
     for elemento in lista_actual:
-        if elemento["tipo"].lower() == filtro_tipo.lower():
-            lista_filtrada.append(elemento)
+        if texto_busqueda.lower() in elemento[criterio].lower():
+            resultados.append(elemento)
             
-    return lista_filtrada
+    return resultados
+
+
+def editar_elemento(titulo_original, nuevos_datos):
+    """
+    Busca un elemento por su título original y actualiza todos sus campos,
+    incluyendo el tipo modificado.
+    """
+    lista_actual = persistencia.cargar_datos()
+    encontrado = False
+    
+    for elemento in lista_actual:
+        if elemento["titulo"].lower() == titulo_original.lower():
+            elemento["titulo"] = nuevos_datos["titulo"]
+            elemento["tipo"] = nuevos_datos["tipo"]
+            elemento["autor"] = nuevos_datos["autor"]
+            elemento["genero"] = nuevos_datos["genero"]
+            elemento["valoracion"] = nuevos_datos["valoracion"]
+            encontrado = True
+            break
+            
+    if encontrado:
+        return persistencia.guardar_datos(lista_actual)
+    return False
+
+
+def eliminar_elemento(titulo_a_borrar):
+    """
+    Elimina de la lista el elemento que coincida con el título entregado.
+    """
+    lista_actual = persistencia.cargar_datos()
+    longitud_inicial = len(lista_actual)
+    
+    # Conservamos todos los elementos EXCEPTO el que queremos borrar
+    lista_actual = [e for e in lista_actual if e["titulo"].lower() != titulo_a_borrar.lower()]
+    
+    if len(lista_actual) < longitud_inicial:
+        return persistencia.guardar_datos(lista_actual)
+    return False
