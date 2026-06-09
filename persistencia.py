@@ -1,3 +1,7 @@
+# Módulo de persistencia.
+# Este archivo se encarga de leer y escribir los datos de la colección
+# en el archivo JSON, lo que permite guardar la información entre sesiones.
+
 # Cargar y guardar el archivo JSON.
 
 {
@@ -16,8 +20,10 @@ ARCHIVO_DATOS = "coleccion.json"
 
 def guardar_datos(lista_elementos):
     """
-    Recibe una lista de Python (con todos los libros/películas)
-    y la guarda en el archivo JSON.
+    Guarda una lista de elementos en el archivo JSON.
+    Esta función toma la colección actual en memoria y la escribe en disco
+    con formato legible, para que la información quede almacenada de forma
+    permanente y pueda recuperarse después.
     """
     try:
         # 'w' significa modo escritura (write). Si el archivo no existe, lo crea.
@@ -35,8 +41,10 @@ def guardar_datos(lista_elementos):
 
 def cargar_datos():
     """
-    Busca el archivo JSON. Si existe, lee los datos y los devuelve como una lista.
-    Si no existe, devuelve una lista vacía para empezar desde cero.
+    Carga los elementos guardados en el archivo JSON.
+    Si el archivo existe, lee su contenido y lo convierte en una lista de
+    Python para que la aplicación pueda usar esos datos. Si no existe,
+    devuelve una lista vacía para comenzar desde cero.
     """
     # os.path.exists verifica si el archivo 'coleccion.json' ya existe en la carpeta
     if not os.path.exists(ARCHIVO_DATOS):

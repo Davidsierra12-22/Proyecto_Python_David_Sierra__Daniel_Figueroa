@@ -1,8 +1,16 @@
+# Módulo de lógica de la colección.
+# Aquí se define la gestión de los elementos culturales: agregar, consultar,
+# editar y eliminar registros, usando la capa de persistencia para guardar
+# y recuperar la información desde el archivo JSON.
+
 import persistencia
+
 
 def añadir_elemento(titulo, tipo, autor, genero, valoracion=None):
     """
-    Carga la lista, añade un diccionario con el nuevo elemento y guarda.
+    Agrega un nuevo elemento a la colección.
+    Esta función lee los datos actuales, crea un diccionario con los valores
+    recibidos y lo añade a la lista antes de guardarlo en el archivo JSON.
     """
     lista_actual = persistencia.cargar_datos()
     nuevo_elemento = {
@@ -18,15 +26,18 @@ def añadir_elemento(titulo, tipo, autor, genero, valoracion=None):
 
 def listar_elementos():
     """
-    Devuelve todos los elementos registrados en el JSON.
+    Devuelve toda la colección almacenada en el archivo JSON.
+    Se usa para mostrar los elementos actuales al usuario o para trabajar
+    con ellos desde otras funciones del programa.
     """
     return persistencia.cargar_datos()
 
 
 def buscar_elementos(criterio, texto_busqueda):
     """
-    Busca elementos que coincidan parcial o totalmente con el criterio elegido 
-    ('titulo', 'autor' o 'genero'). No distingue entre mayúsculas y minúsculas.
+    Busca elementos que coincidan con un texto dado en un campo específico.
+    El criterio puede ser título, autor o género; la comparación se hace de
+    forma insensible a mayúsculas y minúsculas para facilitar la búsqueda.
     """
     lista_actual = persistencia.cargar_datos()
     resultados = []
@@ -40,8 +51,9 @@ def buscar_elementos(criterio, texto_busqueda):
 
 def editar_elemento(titulo_original, nuevos_datos):
     """
-    Busca un elemento por su título original y actualiza todos sus campos,
-    incluyendo el tipo modificado.
+    Modifica un elemento existente usando el título como referencia.
+    Busca el registro original, reemplaza sus datos por los nuevos valores
+    y guarda la colección actualizada en el archivo JSON.
     """
     lista_actual = persistencia.cargar_datos()
     encontrado = False
@@ -63,7 +75,9 @@ def editar_elemento(titulo_original, nuevos_datos):
 
 def eliminar_elemento(titulo_a_borrar):
     """
-    Elimina de la lista el elemento que coincida con el título entregado.
+    Elimina un elemento de la colección por su título.
+    Esta función filtra la lista para quitar el registro indicado y guarda
+    la nueva versión en el archivo JSON si la eliminación fue exitosa.
     """
     lista_actual = persistencia.cargar_datos()
     longitud_inicial = len(lista_actual)

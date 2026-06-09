@@ -1,7 +1,20 @@
+# Módulo principal de la aplicación.
+# Este archivo orquesta el flujo general del programa: muestra el menú,
+# recibe la opción del usuario y llama a las funciones de la interfaz y
+# de la colección para realizar cada operación.
+
 import interfaz
 import coleccion
+import persistencia
+
 
 def ejecutar_aplicacion():
+    """
+    Inicia y mantiene el ciclo principal de la aplicación.
+    Esta función muestra el menú al usuario, interpreta la opción elegida
+    y dirige la ejecución hacia las funciones de añadir, listar, buscar,
+    editar o eliminar elementos hasta que el usuario decida salir.
+    """
     print("¡Bienvenido al Administrador de Colección!")
     
     while True:
@@ -70,12 +83,55 @@ def ejecutar_aplicacion():
             else:
                 print("\n🚫 Operación cancelada.")
             
-        # 6. SALIR
+        # 6. VER ELEMENTOS POR CATEGORÍA
         elif opcion == "6":
+            subopcion = interfaz.mostrar_menu_categorias()
+            if subopcion == "1":
+                categoria = "Libro"
+            elif subopcion == "2":
+                categoria = "Película"
+            elif subopcion == "3":
+                categoria = "Música"
+            elif subopcion == "4":
+                print("\n↩️ Regresando al menú principal...")
+                continue
+            else:
+                print("\n❌ Opción inválida. Intenta de nuevo.")
+                continue
+
+            elementos = [item for item in coleccion.listar_elementos() if item.get("tipo") == categoria]
+            interfaz.mostrar_tabla_elementos(elementos, f"ELEMENTOS DE TIPO {categoria.upper()}")
+
+        # 7. GUARDAR Y CARGAR COLECCIÓN
+        elif opcion == "7":
+            subopcion = interfaz.mostrar_menu_guardado()
+
+            if subopcion == "1":
+                if persistencia.guardar_datos(coleccion.listar_elementos()):
+                    print("\n💾 Colección guardada correctamente en disco.")
+                else:
+                    print("\n❌ No se pudo guardar la colección.")
+
+            elif subopcion == "2":
+                elementos = persistencia.cargar_datos()
+                if elementos:
+                    print("\n📂 Colección cargada desde el archivo JSON.")
+                    interfaz.mostrar_tabla_elementos(elementos, "COLECCIÓN RECARGADA DESDE DISCO")
+                else:
+                    print("\n⚠️ No hay datos guardados para cargar.")
+
+            elif subopcion == "3":
+                print("\n↩️ Regresando al menú principal...")
+
+            else:
+                print("\n❌ Opción inválida. Intenta de nuevo.")
+
+        # 8. SALIR
+        elif opcion == "8":
             print("\n👋 ¡Gracias por usar el Administrador de Colección! Hasta luego.")
             break
         else:
-            print("\n❌ Opción inválida. Digita de 1 a 6.")
+            print("\n❌ Opción inválida. Digita de 1 a 8.")
 
 if __name__ == "__main__":
     ejecutar_aplicacion()

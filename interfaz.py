@@ -1,27 +1,77 @@
+# Módulo de interfaz de consola.
+# Aquí se concentra toda la parte visual del programa: menús, preguntas,
+# mensajes para el usuario y la presentación de los datos en tablas.
+
 from tabulate import tabulate
+
 
 def mostrar_menu_principal():
     """
-    Dibuja el menú interactivo principal en la consola.
+    Muestra el menú principal del sistema en pantalla.
+    Esta función sirve como punto de entrada para que el usuario elija qué
+    acción desea realizar: añadir, listar, buscar, editar, eliminar,
+    filtrar por categoría, guardar/cargar o salir.
+    Devuelve la opción escrita por el usuario para que la lógica principal
+    la procese en el bucle del programa.
     """
     print("\n=========================================")
-    print("  ADMINISTRADOR DE COLECCIÓN CULTURAL   ")
+    print("     ADMINISTRADOR DE COLECCIÓN         ")
     print("=========================================")
-    print(" 1. ➕ Añadir nuevo elemento")
-    print(" 2. 📋 Listar toda la colección")
-    print(" 3. 🔍 Buscar elemento")
-    print(" 4. ✏️  Editar elemento")
-    print(" 5. ❌ Eliminar elemento")
-    print(" 6. 🚪 Salir")
+    print(" 1. ➕ Añadir un Nuevo Elemento")
+    print(" 2. 📋 Ver Todos los Elementos")
+    print(" 3. 🔍 Buscar un Elemento")
+    print(" 4. ✏️  Editar un Elemento")
+    print(" 5. ❌ Eliminar un Elemento")
+    print(" 6. 🗂️  Ver Elementos por Categoría")
+    print(" 7. 💾 Guardar y Cargar Colección")
+    print(" 8. 🚪 Salir")
     print("=========================================")
-    
-    return input("Seleccione una opción (1-6): ").strip()
+
+    return input("Selecciona una opción (1-8): ").strip()
+
+
+def mostrar_menu_categorias():
+    """
+    Muestra un submenú para filtrar la colección por tipo de contenido.
+    Ayuda al usuario a ver únicamente libros, películas o música sin
+    complicar la navegación del programa.
+    """
+    print("\n=========================================")
+    print("      VER ELEMENTOS POR CATEGORÍA        ")
+    print("=========================================")
+    print(" 1. Ver Libros")
+    print(" 2. Ver Películas")
+    print(" 3. Ver Música")
+    print(" 4. Regresar al Menú Principal")
+    print("=========================================")
+
+    return input("Selecciona una opción (1-4): ").strip()
+
+
+def mostrar_menu_guardado():
+    """
+    Muestra un submenú para guardar o recargar la colección desde disco.
+    Esto mantiene la experiencia clara y ayuda a entender dónde se guardan
+    los cambios realizados en la aplicación.
+    """
+    print("\n=========================================")
+    print("      GUARDAR Y CARGAR COLECCIÓN        ")
+    print("=========================================")
+    print(" 1. Guardar la Colección Actual")
+    print(" 2. Cargar la Colección Guardada")
+    print(" 3. Regresar al Menú Principal")
+    print("=========================================")
+
+    return input("Selecciona una opción (1-3): ").strip()
 
 
 def pedir_datos_elemento(valores_previos=None):
     """
-    Pide los datos de un elemento por consola. Si recibe 'valores_previos',
-    actúa en modo edición mostrando los datos antiguos y permitiendo modificarlos.
+    Solicita al usuario todos los datos necesarios para crear o editar un elemento.
+    Si recibe una colección de valores previos, esta función funciona en modo
+    edición: muestra los datos actuales y permite cambiarlos uno por uno,
+    manteniendo los valores que el usuario deje en blanco.
+    Devuelve una tupla con título, tipo, autor, género y valoración.
     """
     if valores_previos:
         print(f"\n--- EDITANDO: {valores_previos['titulo']} ---")
@@ -93,7 +143,10 @@ def pedir_datos_elemento(valores_previos=None):
 
 def convertir_estrellas(valoracion):
     """
-    Convierte un valor numérico (1-5) en estrellas gráficas.
+    Convierte una valoración numérica en una representación visual de estrellas.
+    Si la puntuación es un número entero entre 1 y 5, la función devuelve
+    una cadena con ese número de símbolos ⭐; si no es numérica, devuelve
+    el valor tal como está para mostrarlo sin alterar el formato.
     """
     if isinstance(valoracion, int):
         return "⭐" * valoracion
@@ -102,7 +155,10 @@ def convertir_estrellas(valoracion):
 
 def mostrar_tabla_elementos(lista_elementos, titulo_tabla="MI COLECCIÓN PERSONAL"):
     """
-    Construye una matriz limpia y renderiza la tabla usando tabulate.
+    Presenta una lista de elementos en formato de tabla para facilitar su lectura.
+    Esta función convierte los datos en filas y columnas, aplica el formato
+    visual de la librería tabulate y muestra el resultado en consola.
+    Si la lista está vacía, informa al usuario que no hay elementos.
     """
     print(f"\n--- {titulo_tabla} ---")
     if not lista_elementos:
@@ -126,7 +182,9 @@ def mostrar_tabla_elementos(lista_elementos, titulo_tabla="MI COLECCIÓN PERSONA
 
 def pedir_criterio_busqueda():
     """
-    Captura los filtros necesarios para realizar las búsquedas.
+    Pide al usuario el criterio y el texto para buscar elementos en la colección.
+    Permite filtrar por título, autor o género, y devuelve ambos valores para
+    que la capa de lógica pueda localizar coincidencias en los datos guardados.
     """
     print("\n--- CRITERIOS DE BÚSQUEDA ---")
     print("1. Por Título")
