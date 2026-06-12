@@ -10,7 +10,7 @@ def mostrar_menu_principal():
     Muestra el menú principal del sistema en pantalla.
     Esta función sirve como punto de entrada para que el usuario elija qué
     acción desea realizar: añadir, listar, buscar, editar, eliminar,
-    filtrar por categoría, guardar/cargar o salir.
+    filtrar por categoría, guardar/cargar, calcular promedios o salir.
     Devuelve la opción escrita por el usuario para que la lógica principal
     la procese en el bucle del programa.
     """
@@ -24,10 +24,11 @@ def mostrar_menu_principal():
     print(" 5. ❌ Eliminar un Elemento")
     print(" 6. 🗂️  Ver Elementos por Categoría")
     print(" 7. 💾 Guardar y Cargar Colección")
-    print(" 8. 🚪 Salir")
+    print(" 8. 📊 Calcular Promedio por Categoría")#se añade la opcion n el menu principal para q tmabien la puedan usar como tal 
+    print(" 9. 🚪 Salir")
     print("=========================================")
 
-    return input("Selecciona una opción (1-8): ").strip()
+    return input("Selecciona una opción (1-9): ").strip()
 
 
 def mostrar_menu_categorias():
@@ -197,3 +198,22 @@ def pedir_criterio_busqueda():
     if opc == "1": return "titulo", texto
     if opc == "2": return "autor", texto
     return "genero", texto
+
+#se crea un menu interacri para la nueva funcionalidad del quiz 
+def mostrar_menu_promedio():
+    """
+    Muestra un submenú para calcular el promedio de valoraciones por categoría.
+    Permite al usuario elegir si desea calcular el promedio de libros,
+    películas, música o regresar al menú principal.
+    """
+    print("\n=========================================")
+    print("   CALCULAR PROMEDIO POR CATEGORÍA      ")
+    print("=========================================")
+    print(" 1. Promedio de Libros")
+    print(" 2. Promedio de Películas")
+    print(" 3. Promedio de Música")
+    print(" 4. Promedio General")
+    print(" 5. Regresar al Menú Principal")
+    print("=========================================")
+
+    return input("Selecciona una opción (1-5): ").strip()

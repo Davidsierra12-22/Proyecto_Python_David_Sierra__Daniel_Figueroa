@@ -1,7 +1,4 @@
 # Módulo principal de la aplicación.
-# Este archivo orquesta el flujo general del programa: muestra el menú,
-# recibe la opción del usuario y llama a las funciones de la interfaz y
-# de la colección para realizar cada operación.
 
 import interfaz
 import coleccion
@@ -20,7 +17,7 @@ def ejecutar_aplicacion():
     while True:
         opcion = interfaz.mostrar_menu_principal()
         
-        # 1. AÑADIR
+        # Opción 1: AÑADIR ELEMENTO
         if opcion == "1":
             titulo, tipo, autor, genero, valoracion = interfaz.pedir_datos_elemento()
             if coleccion.añadir_elemento(titulo, tipo, autor, genero, valoracion):
@@ -28,18 +25,18 @@ def ejecutar_aplicacion():
             else:
                 print("\n❌ Error al guardar.")
                 
-        # 2. LISTAR
+        # Opción 2: LISTAR ELEMENTOS
         elif opcion == "2":
             elementos = coleccion.listar_elementos()
             interfaz.mostrar_tabla_elementos(elementos)
             
-        # 3. BUSCAR
+        # Opción 3: BUSCAR ELEMENTO
         elif opcion == "3":
             criterio, texto = interfaz.pedir_criterio_busqueda()
             resultados = coleccion.buscar_elementos(criterio, texto)
             interfaz.mostrar_tabla_elementos(resultados, f"RESULTADOS DE BÚSQUEDA ({texto.upper()})")
             
-        # 4. EDITAR
+        # Opción 4: EDITAR ELEMENTO
         elif opcion == "4":
             titulo_editar = input("\n✏️ Escribe el título EXACTO del elemento a editar: ").strip()
             coincidencias = coleccion.buscar_elementos("titulo", titulo_editar)
@@ -51,10 +48,7 @@ def ejecutar_aplicacion():
                     break
             
             if elemento_encontrado:
-                # Capturamos todos los datos (incluyendo el tipo modificado)
                 t, tp, aut, gen, val = interfaz.pedir_datos_elemento(elemento_encontrado)
-                
-                # Armamos el diccionario correcto con el tipo incluido
                 nuevos_datos = {
                     "titulo": t,
                     "tipo": tp,
@@ -70,7 +64,7 @@ def ejecutar_aplicacion():
             else:
                 print("❌ No se encontró ningún elemento con ese título.")
                 
-        # 5. ELIMINAR
+        # Opción 5: ELIMINAR ELEMENTO
         elif opcion == "5":
             titulo_borrar = input("\n❌ Escribe el título EXACTO del elemento a eliminar: ").strip()
             seguro = input(f"¿Estás seguro de eliminar '{titulo_borrar}'? (s/n): ").strip().lower()
@@ -83,7 +77,7 @@ def ejecutar_aplicacion():
             else:
                 print("\n🚫 Operación cancelada.")
             
-        # 6. VER ELEMENTOS POR CATEGORÍA
+        # Opción 6: VER ELEMENTOS POR CATEGORÍA
         elif opcion == "6":
             subopcion = interfaz.mostrar_menu_categorias()
             if subopcion == "1":
@@ -102,7 +96,7 @@ def ejecutar_aplicacion():
             elementos = [item for item in coleccion.listar_elementos() if item.get("tipo") == categoria]
             interfaz.mostrar_tabla_elementos(elementos, f"ELEMENTOS DE TIPO {categoria.upper()}")
 
-        # 7. GUARDAR Y CARGAR COLECCIÓN
+        # Opción 7: GUARDAR Y CARGAR COLECCIÓN
         elif opcion == "7":
             subopcion = interfaz.mostrar_menu_guardado()
 
@@ -122,16 +116,31 @@ def ejecutar_aplicacion():
 
             elif subopcion == "3":
                 print("\n↩️ Regresando al menú principal...")
-
             else:
                 print("\n❌ Opción inválida. Intenta de nuevo.")
 
-        # 8. SALIR
+        # Opción 8: CALCULAR PROMEDIO POR CATEGORÍA
         elif opcion == "8":
+            subopcion = interfaz.mostrar_menu_promedio()
+            if subopcion == "1":
+                coleccion.promedio_valoraciones("Libro")
+            elif subopcion == "2":
+                coleccion.promedio_valoraciones("Película")
+            elif subopcion == "3":
+                coleccion.promedio_valoraciones("Música")
+            elif subopcion == "4":
+                coleccion.promedio_valoraciones()
+            elif subopcion == "5":
+                print("\n↩️ Regresando al menú principal...")
+            else:
+                print("\n❌ Opción inválida. Intenta de nuevo.")
+
+        # Opción 9: SALIR
+        elif opcion == "9":
             print("\n👋 ¡Gracias por usar el Administrador de Colección! Hasta luego.")
             break
         else:
-            print("\n❌ Opción inválida. Digita de 1 a 8.")
+            print("\n❌ Opción inválida. Digita de 1 a 9.")
 
 if __name__ == "__main__":
     ejecutar_aplicacion()
