@@ -19,5 +19,26 @@
         "autor": "Deivis",
         "genero": "Nobinario",
         "valoracion": 1
+    },
+    {
+        "titulo": "el apariico",
+        "tipo": "Libro",
+        "autor": "Autor",
+        "genero": "Accion",
+        "valoracion": 4
+    },
+    {
+        "titulo": "rapidos y furiosso",
+        "tipo": "Película",
+        "autor": "A",
+        "genero": "Drama",
+        "valoracion": 4
+    },
+    {
+        "titulo": "de pe aa",
+        "tipo": "Música",
+        "autor": "doble porcion",
+        "genero": "Rap",
+        "valoracion": 5
     }
 ]
